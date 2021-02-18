@@ -1,5 +1,5 @@
 import time
-from datetime import datetime
+from datetime import datetime,timezone
 
 from bs4 import BeautifulSoup
 from re import findall
@@ -9,6 +9,15 @@ import logging as logme
 
 from .tweet import utc_to_local, Tweet_formats
 
+def convertToDateTime(string):
+    dateTimeList = string.split()
+    ListLength = len(dateTimeList)
+    if ListLength == 2:
+        return string
+    if ListLength == 1:
+        return string + " 00:00:00"
+    else:
+        return ""
 
 class NoMoreTweetsException(Exception):
     def __init__(self, msg):
@@ -99,6 +108,15 @@ def parse_tweets(config, response):
                 raise ValueError('Unable to find ID of tweet in timeline.')
             try:
                 temp_obj = response['globalObjects']['tweets'][_id]
+                if(config.Since):
+                    cdt = config.Since
+                    cdt = datetime.strptime(convertToDateTime(cdt), "%Y-%m-%d %H:%M:%S")
+                    cdt = cdt.astimezone(tz=None)
+                    tempdt = response['globalObjects']['tweets'][_id]['created_at']
+                    tempdt = datetime.strptime(tempdt, '%a %b %d %H:%M:%S %z %Y')
+                    tempdt = tempdt.replace(tzinfo=timezone.utc).astimezone(tz=None)
+                    if(cdt > tempdt):
+                        break
             except KeyError:
                 logme.info('encountered a deleted tweet with id {}'.format(_id))
 
