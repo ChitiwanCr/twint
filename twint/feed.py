@@ -135,6 +135,8 @@ def parse_tweets(config, response):
                     'retweet_id': rt_id,
                     'retweet_date': _dt,
                 }
+                temp_obj['favorite_count'] = response['globalObjects']['tweets'][rt_id]['favorite_count']
+                temp_obj['replies_count'] = response['globalObjects']['tweets'][rt_id]['replies_count']
             feed.append(temp_obj)
     next_cursor = _get_cursor(response)
     return feed, next_cursor
