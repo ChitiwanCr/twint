@@ -134,15 +134,13 @@ def parse_tweets(config, response):
                     'user_rt': response['globalObjects']['tweets'][rt_id]['full_text'],
                     'retweet_id': rt_id,
                     'retweet_date': _dt,
+                    'retweet_follower' : response['globalObjects']['users'][response['globalObjects']['tweets'][rt_id]['user_id_str']]['followers_count'],
                 }
                 try:
                     temp_obj['favorite_count'] = response['globalObjects']['tweets'][rt_id]['favorite_count']
                 except:
                     pass
-                try:
-                    temp_obj['replies_count'] = response['globalObjects']['tweets'][rt_id]['replies_count']
-                except:
-                    pass
+            temp_obj['post_follower'] = response['globalObjects']['users'][temp_obj['user_id_str']]['followers_count']
             feed.append(temp_obj)
     next_cursor = _get_cursor(response)
     return feed, next_cursor
