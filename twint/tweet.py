@@ -129,6 +129,7 @@ def Tweet(tw, config):
     t.retweets_count = tw['retweet_count']
     t.likes_count = tw['favorite_count']
     t.post_follower = tw['post_follower']
+    t.post_profile_image = tw['post_profile_image']
     t.link = f"https://twitter.com/{t.username}/status/{t.id}"
     try:
         if 'user_rt_id' in tw['retweet_data']:
@@ -138,6 +139,7 @@ def Tweet(tw, config):
             t.user_rt = tw['retweet_data']['user_rt']
             t.user_rt_id = tw['retweet_data']['user_rt_id']
             t.retweet_follower = tw['retweet_data']['retweet_follower']
+            t.retweet_profile_image = tw['retweet_data']['retweet_profile_image']
     except KeyError:
         t.retweet = False
         t.retweet_id = ''
@@ -145,6 +147,7 @@ def Tweet(tw, config):
         t.user_rt = ''
         t.user_rt_id = ''
         t.retweet_follower = ''
+        t.retweet_profile_image = ''
     try:
         t.quote_url = tw['quoted_status_permalink']['expanded'] if tw['is_quote_status'] else ''
     except KeyError:
