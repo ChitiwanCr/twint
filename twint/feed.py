@@ -135,12 +135,14 @@ def parse_tweets(config, response):
                     'retweet_id': rt_id,
                     'retweet_date': _dt,
                     'retweet_follower' : response['globalObjects']['users'][response['globalObjects']['tweets'][rt_id]['user_id_str']]['followers_count'],
+                    'retweet_profile_image' : response['globalObjects']['users'][response['globalObjects']['tweets'][rt_id]['user_id_str']]['profile_image_url_https'],
                 }
                 try:
                     temp_obj['favorite_count'] = response['globalObjects']['tweets'][rt_id]['favorite_count']
                 except:
                     pass
             temp_obj['post_follower'] = response['globalObjects']['users'][temp_obj['user_id_str']]['followers_count']
+            temp_obj['post_profile_image'] = response['globalObjects']['users'][temp_obj['user_id_str']]['profile_image_url_https']
             feed.append(temp_obj)
     next_cursor = _get_cursor(response)
     return feed, next_cursor
